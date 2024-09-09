@@ -12,27 +12,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import ru.pugovishnikova.example.testdiapp.viewmodels.UserViewModel
 import ru.pugovishnikova.example.testdiapp.adapters.UserAdapter
-import ru.pugovishnikova.example.testdiapp.data.User
+import ru.pugovishnikova.example.testdiapp.data.model.User
 import ru.pugovishnikova.example.testdiapp.databinding.FragmentUserBinding
-import ru.pugovishnikova.example.testdiapp.utils.LateInitData
 import ru.pugovishnikova.example.testdiapp.utils.State
+import ru.pugovishnikova.example.testdiapp.viewmodels.UserViewModel
 
 @AndroidEntryPoint
 class UserFragment : Fragment() {
     private var _binding: FragmentUserBinding? = null
     private val binding get() = _binding!!
-    private var newId: Int? = 1
-    private var newLimit: Int? = 10
-    private val userViewModel by lazy {
-        val viewModel: UserViewModel by viewModels()
-        val newLateInitData = LateInitData(1, 10)
-        newId?.let { newLateInitData.setId(it) }
-        newLimit?.let { newLateInitData.setLimit(it) }
-        viewModel.lateInitData = newLateInitData
-        viewModel
-    }
+    private val userViewModel by viewModels<UserViewModel>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,8 +42,14 @@ class UserFragment : Fragment() {
             userViewModel.getAllUsersFromServer()
         }
 
+
+
         binding.button.setOnClickListener {
-            userViewModel.getInfoAboutUser()
+            val id: Int? = binding.editTextId.text.toString().toInt()
+//            id?.let {
+//                val action = UserFragmentDirections.actionUserFragmentToUniqueUserFragment(it)
+//                view.findNavController().navigate(action)
+//            }
         }
     }
 
@@ -75,6 +72,7 @@ class UserFragment : Fragment() {
             is State.Success -> {
                 binding.button.isVisible = true
                 binding.textView.isVisible = true
+                binding.textView.text = "ИНТЕРНЕТ ЕСТЬ! ДАННЫЕ С СЕРВЕРА"
                 binding.editTextId.isVisible = true
                 binding.progressbar.isVisible = false
                 binding.rv.isVisible = true
@@ -87,7 +85,7 @@ class UserFragment : Fragment() {
             is State.Fail -> {
                 binding.progressbar.isVisible = false
                 binding.textView.isVisible = true
-                binding.textView.text = "ПИЗДЕЦ"
+                binding.textView.text = "ИНТЕРНЕТА НЕТ((( ДАННЫЕ С БД"
             }
 
         }

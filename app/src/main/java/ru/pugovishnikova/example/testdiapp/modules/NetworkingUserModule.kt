@@ -1,4 +1,4 @@
-package ru.pugovishnikova.example.testdiapp.repositories.modules
+package ru.pugovishnikova.example.testdiapp.modules
 
 import android.content.Context
 import dagger.Module
@@ -9,8 +9,10 @@ import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.pugovishnikova.example.testdiapp.data.db.AppDatabase
-import ru.pugovishnikova.example.testdiapp.data.db.UserDao
-import ru.pugovishnikova.example.testdiapp.data.servicies.UserService
+import ru.pugovishnikova.example.testdiapp.data.dao.PostDao
+import ru.pugovishnikova.example.testdiapp.data.dao.UserDao
+import ru.pugovishnikova.example.testdiapp.servicies.PostService
+import ru.pugovishnikova.example.testdiapp.servicies.UserService
 
 
 @Module
@@ -26,6 +28,10 @@ class NetworkingUserModule {
     fun getUserDao(appDatabase: AppDatabase): UserDao {
         return appDatabase.getUserDao()
     }
+    @Provides
+    fun getPostDao(appDatabase: AppDatabase): PostDao {
+        return appDatabase.getPostDao()
+    }
 
     @Provides
     fun provideRetrofit(): Retrofit {
@@ -38,6 +44,11 @@ class NetworkingUserModule {
     @Provides
     fun provideUserService(retrofit: Retrofit): UserService {
         return retrofit.create(UserService::class.java)
+    }
+
+    @Provides
+    fun providePostService(retrofit: Retrofit): PostService {
+        return retrofit.create(PostService::class.java)
     }
 
     companion object {

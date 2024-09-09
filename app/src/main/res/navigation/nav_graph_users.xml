@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_users"
+    app:startDestination="@id/userFragment">
+
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="ru.pugovishnikova.example.testdiapp.fragments.UserFragment"
+        android:label="UserFragment" >
+        <action
+            android:id="@+id/action_userFragment_to_uniqueUserFragment"
+            app:destination="@id/uniqueUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/uniqueUserFragment"
+        android:name="ru.pugovishnikova.example.testdiapp.fragments.UniqueUserFragment"
+        android:label="UniqueUserFragment" >
+        <action
+            android:id="@+id/action_uniqueUserFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+</navigation>

@@ -1,18 +1,14 @@
-package ru.pugovishnikova.example.testdiapp.data
+package ru.pugovishnikova.example.testdiapp.data.model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-
 @Entity(tableName = "user")
 data class User(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int,
+    @PrimaryKey val id: Int,
     val firstName: String,
     val lastName: String,
     val maidenName: String,
@@ -93,6 +89,7 @@ data class Crypto(
     val wallet: String,
     val network: String
 )
+
 
 class UserTypeConverter {
 

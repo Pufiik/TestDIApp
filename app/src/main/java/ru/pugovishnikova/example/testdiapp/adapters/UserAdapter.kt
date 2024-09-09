@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ru.pugovishnikova.example.testdiapp.data.User
+import ru.pugovishnikova.example.testdiapp.data.model.User
 import ru.pugovishnikova.example.testdiapp.databinding.UserItemBinding
 
 class UserAdapter(
@@ -24,6 +24,7 @@ class UserAdapter(
     inner class UserViewHolder(private val binding: UserItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
+            binding.userId.text = user.id.toString()
             binding.userName.text = user.firstName
             binding.userSurname.text = user.lastName
             binding.userImage.apply {

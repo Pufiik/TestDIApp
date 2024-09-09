@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -52,6 +53,12 @@ dependencies {
     val roomVersion = "2.6.1"
     val retrofit2Version = "2.11.0"
     val glideVersion = "4.16.0"
+    val pagingVersion = "3.3.2"
+    val navigationVersion = "2.7.7"
+
+    //navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
     //DaggerHilt
     implementation("com.google.dagger:hilt-android:$daggerHiltVersion")
@@ -85,7 +92,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("androidx.activity:activity-ktx:1.3.1")
 
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("androidx.paging:paging-runtime:$pagingVersion")
+
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.activity:activity-compose:1.4.0")
     implementation("io.coil-kt:coil-compose:1.3.2")
