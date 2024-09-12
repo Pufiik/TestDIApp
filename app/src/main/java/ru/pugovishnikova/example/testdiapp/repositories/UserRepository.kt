@@ -7,10 +7,10 @@ interface UserRepository {
     suspend fun deleteAllUsers()
     suspend fun getUserByIDFromServer(userId: Int): User
     suspend fun getLocalUserByID(userId: Int): User
-    suspend fun cacheUserToDB(userId: Int)
+    suspend fun cacheUserToDB(user: User)
 
-    suspend fun updateUserFromDB(userId: Int)
+    suspend fun updateUserFromDB(user: User)
 
-    suspend fun deleteUserFromDB(userId: Int)
+    suspend fun deleteUserFromDB(user: User)
 }
 

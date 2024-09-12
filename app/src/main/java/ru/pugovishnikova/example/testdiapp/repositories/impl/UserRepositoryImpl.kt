@@ -12,8 +12,7 @@ import javax.inject.Inject
 
 @BoundTo(supertype = UserRepository::class, component = SingletonComponent::class)
 class UserRepositoryImpl @Inject constructor(
-    private val userService: UserService,
-    private val userDao: UserDao
+    private val userService: UserService, private val userDao: UserDao
 ) : UserRepository {
     override suspend fun getAllUsersFromServer(): List<User> {
         val response = userService.getAllUsers()
@@ -37,47 +36,32 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getLocalUserByID(userId: Int): User = userDao.getUserById(userId)
 
-    override suspend fun cacheUserToDB(userId: Int) {
-        val response = userService.getUserById(userId)
+    override suspend fun cacheUserToDB(user: User) {
+        try {
+            userDao.insertUser(user)
+        } catch (e: Exception) {
+            throw DataException(CACHE_USER, USER_EXCEPTION)
+        }
 
-        if (response.isSuccessful) {
-            try {
-                userDao.insertUser(response.body()!!)
-            } catch (e: Exception) {
-                throw DataException(CACHE_USER, USER_EXCEPTION)
-            }
-        } else {
-            throw DataException(GET_USER_BY_ID, USER_EXCEPTION)
+    }
+
+    override suspend fun updateUserFromDB(user: User) {
+        try {
+            userDao.updateUser(user)
+        } catch (e: Exception) {
+            throw DataException(UPDATE_USER, USER_EXCEPTION)
+        }
+
+    }
+
+    override suspend fun deleteUserFromDB(user: User) {
+        try {
+            userDao.deleteUser(user)
+        } catch (e: Exception) {
+            throw DataException(DELETE_USER, USER_EXCEPTION)
         }
     }
 
-    override suspend fun updateUserFromDB(userId: Int) {
-        val response = userService.getUserById(userId)
-
-        if (response.isSuccessful) {
-            try {
-                userDao.updateUser(response.body()!!)
-            } catch (e: Exception) {
-                throw DataException(UPDATE_USER, USER_EXCEPTION)
-            }
-        } else {
-            throw DataException(GET_USER_BY_ID, USER_EXCEPTION)
-        }
-    }
-
-    override suspend fun deleteUserFromDB(userId: Int) {
-        val response = userService.getUserById(userId)
-
-        if (response.isSuccessful) {
-            try {
-                userDao.deleteUser(response.body()!!)
-            } catch (e: Exception) {
-                throw DataException(DELETE_USER, USER_EXCEPTION)
-            }
-        } else {
-            throw DataException(GET_USER_BY_ID, USER_EXCEPTION)
-        }
-    }
 
     companion object {
         private const val GET_ALL_USERS_ERROR = "Ошибка получения всех пользователей"

@@ -31,7 +31,7 @@ class UserViewModel @Inject constructor(
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                withTimeout(5000L) {
+                withTimeout(100000L) {
                     stateUsers.value = State.Loading()
                     try {
                         val result = userRepository.getAllUsersFromServer()

@@ -4,29 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/whereText"
         android:textSize="30sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:text="hello">
     </TextView>
+    <TextView
+        android:id="@+id/userId"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hello"/>
+    <TextView
+        android:id="@+id/user_name"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hello"/>
     <!--    <androidx.compose.ui.platform.ComposeView-->
     <!--        android:id="@+id/text"-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent"/>-->
 
-    <EditText
-        android:id="@+id/edit_text_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Введите id"
-        />
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/userSurname"
+        android:textSize="30sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Получить данные">
-    </Button>
+        android:text="hello">
+    </TextView>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"

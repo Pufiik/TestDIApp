@@ -95,16 +95,6 @@ class UserTypeConverter {
 
     private val gson = Gson()
 
-    @TypeConverter
-    fun fromYourDataModel(value: User?): String? {
-        return gson.toJson(value)
-    }
-
-    @TypeConverter
-    fun toYourDataModel(value: String?): User? {
-        val listType = object : TypeToken<User>() {}.type
-        return gson.fromJson(value, listType)
-    }
 
     @TypeConverter
     fun fromHair(value: Hair): String? {
@@ -140,17 +130,6 @@ class UserTypeConverter {
     }
 
     @TypeConverter
-    fun fromCoordinates(value: Coordinates): String? {
-        return gson.toJson(value)
-    }
-
-    @TypeConverter
-    fun toCoordinates(value: String?): Coordinates? {
-        val listType = object : TypeToken<Coordinates>() {}.type
-        return gson.fromJson(value, listType)
-    }
-
-    @TypeConverter
     fun fromBank(value: Bank): String? {
         return gson.toJson(value)
     }
@@ -161,16 +140,6 @@ class UserTypeConverter {
         return gson.fromJson(value, listType)
     }
 
-    @TypeConverter
-    fun fromCompanyAddress(value: CompanyAddress): String? {
-        return gson.toJson(value)
-    }
-
-    @TypeConverter
-    fun toCompanyAddress(value: String?): CompanyAddress? {
-        val listType = object : TypeToken<CompanyAddress>() {}.type
-        return gson.fromJson(value, listType)
-    }
 
     @TypeConverter
     fun fromCrypto(value: Crypto): String? {

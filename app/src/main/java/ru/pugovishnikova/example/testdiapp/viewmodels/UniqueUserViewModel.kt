@@ -8,12 +8,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import ru.pugovishnikova.example.testdiapp.data.datasource.PostDataSource
 import ru.pugovishnikova.example.testdiapp.data.dto.UserData
 import ru.pugovishnikova.example.testdiapp.exceptions.DataException
 import ru.pugovishnikova.example.testdiapp.repositories.PostRepository
@@ -26,13 +23,10 @@ import javax.inject.Inject
 class UniqueUserViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val postRepository: PostRepository,
-    private val postDataSource: PostDataSource
 ) : ViewModel() {
+    lateinit var idClass: IdClass
 
-    lateinit var id: IdClass
-    val limit = 20
     private var fetchJob: Job? = null
-
     private val stateUserInfo = MutableStateFlow<State<UserData>>(State.Idle())
     fun requireStateUserInfo() = stateUserInfo.asStateFlow()
 
@@ -42,15 +36,12 @@ class UniqueUserViewModel @Inject constructor(
         fetchJob = viewModelScope.launch {
             stateUserInfo.value = State.Loading()
             try {
-                getUserData(id.getID())
+                getUserData(idClass.getID())
             } catch (e: DataException) {
                 if ((e.type == USER_EXCEPTION) || (e.type == POST_EXCEPTION)) {
-                    val user = userRepository.getLocalUserByID(id.getID())
+                    val user = userRepository.getLocalUserByID(idClass.getID())
                     val posts = async {
-                        postDataSource.getAllPosts()
-                            .filter {
-                                it.userId == id.getID()
-                            }
+                        postRepository.getUserPostsFromServer(idClass.getID())
                     }
                     stateUserInfo.value =
                         State.Success(UserData(user, posts.await().toList()))
@@ -64,12 +55,22 @@ class UniqueUserViewModel @Inject constructor(
 
 
     private suspend fun getUserData(id: Int) = withContext(Dispatchers.IO) {
-        withTimeout(5000L) {
+        withTimeout(100000L) {
             val userInfo = async { userRepository.getUserByIDFromServer(id) }
-            val posts = async { postRepository.getPosts() }
+            val userPosts = async { postRepository.getAllPostsFromServer() }
 
+            val userInfoAwaited = userInfo.await()
+            val userPostsAwaited = userPosts.await().filter { post -> post.userId == id }
+
+
+            userRepository.cacheUserToDB(userInfoAwaited)
             stateUserInfo.value =
-                State.Success(UserData(userInfo.await(), posts.await().posts))
+                State.Success(
+                    UserData(
+                        userInfoAwaited,
+                        userPostsAwaited
+                    )
+                )
         }
     }
 

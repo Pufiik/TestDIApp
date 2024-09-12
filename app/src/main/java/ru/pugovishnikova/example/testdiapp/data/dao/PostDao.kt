@@ -6,17 +6,17 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 import ru.pugovishnikova.example.testdiapp.data.model.Post
 
 @Dao
 interface PostDao {
 
-    @Query("SELECT * FROM post ORDER BY userId DESC LIMIT :limit OFFSET :offset")
-    suspend fun getAllPosts(limit: Int, offset: Int): List<Post>
+    @Query("SELECT * FROM post ")
+    suspend fun getAllPosts(): List<Post>
 
-    @Query("SELECT * FROM post")
-    fun observeUsersPosts(): Flow<List<Post>>
+    @Query("SELECT * FROM post  where userid= :id ORDER BY userId")
+    fun getUsersPosts(id : Int): List<Post>
+
 
     @Query("SELECT * FROM post WHERE id= :id")
     suspend fun getPostById(id: Int): Post
@@ -31,6 +31,6 @@ interface PostDao {
     suspend fun deletePost(post: Post)
 
     @Query("DELETE FROM post")
-    suspend fun deleteAllPosts(post: Post)
+    suspend fun deleteAllPosts()
 
 }

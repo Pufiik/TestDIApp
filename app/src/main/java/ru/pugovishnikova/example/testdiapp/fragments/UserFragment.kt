@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -45,11 +46,11 @@ class UserFragment : Fragment() {
 
 
         binding.button.setOnClickListener {
-            val id: Int? = binding.editTextId.text.toString().toInt()
-//            id?.let {
-//                val action = UserFragmentDirections.actionUserFragmentToUniqueUserFragment(it)
-//                view.findNavController().navigate(action)
-//            }
+            val id: String = binding.editTextId.text.toString()
+            if (isPositiveNumber(id)) {
+                    val action = UserFragmentDirections.actionUserFragmentToUniqueUserFragment(id.toInt())
+                    view.findNavController().navigate(action)
+                }
         }
     }
 
@@ -89,6 +90,11 @@ class UserFragment : Fragment() {
             }
 
         }
+    }
+
+    private fun isPositiveNumber(value: String): Boolean {
+        val pattern = "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+        return value.matches(Regex(pattern))
     }
 
 }
